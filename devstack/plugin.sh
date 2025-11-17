@@ -109,6 +109,8 @@ function configure_designate {
     sudo chown root:root $tempfile
     sudo mv $tempfile /etc/sudoers.d/designate-rootwrap
 
+    touch $DESIGNATE_CONF_DIR/secrets.conf
+
     if is_service_enabled tls-proxy; then
         iniset $DESIGNATE_CONF keystone cafile $SSL_BUNDLE_FILE
     fi
