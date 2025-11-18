@@ -46,7 +46,7 @@ function configure_designate {
 
     iniset $DESIGNATE_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     iniset $DESIGNATE_CONF DEFAULT state_path $DESIGNATE_STATE_PATH
-    iniset $DESIGNATE_CONF DEFAULT root-helper sudo designate-rootwrap $DESIGNATE_ROOTWRAP_CONF
+    iniset $DESIGNATE_CONF DEFAULT root_helper sudo $DESIGNATE_BIN_DIR/designate-rootwrap $DESIGNATE_ROOTWRAP_CONF
     iniset $DESIGNATE_CONF storage:sqlalchemy connection `database_connection_url designate`
 
     # Quota Configuration
@@ -108,6 +108,8 @@ function configure_designate {
     chmod 0440 $tempfile
     sudo chown root:root $tempfile
     sudo mv $tempfile /etc/sudoers.d/designate-rootwrap
+
+    touch $DESIGNATE_CONF_DIR/secrets.conf
 
     if is_service_enabled tls-proxy; then
         iniset $DESIGNATE_CONF keystone cafile $SSL_BUNDLE_FILE
