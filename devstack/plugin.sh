@@ -46,7 +46,7 @@ function configure_designate {
 
     iniset $DESIGNATE_CONF DEFAULT debug $ENABLE_DEBUG_LOG_LEVEL
     iniset $DESIGNATE_CONF DEFAULT state_path $DESIGNATE_STATE_PATH
-    iniset $DESIGNATE_CONF DEFAULT root-helper sudo designate-rootwrap $DESIGNATE_ROOTWRAP_CONF
+    iniset $DESIGNATE_CONF DEFAULT root_helper sudo $DESIGNATE_ROOTWRAP_BIN $DESIGNATE_ROOTWRAP_CONF
     iniset $DESIGNATE_CONF storage:sqlalchemy connection `database_connection_url designate`
 
     # Quota Configuration
@@ -102,7 +102,7 @@ function configure_designate {
     iniset $DESIGNATE_CONF oslo_concurrency lock_path "$DESIGNATE_STATE_PATH"
 
     # Set up the rootwrap sudoers for designate
-    rootwrap_sudoer_cmd="$DESIGNATE_BIN_DIR/designate-rootwrap $DESIGNATE_ROOTWRAP_CONF *"
+    rootwrap_sudoer_cmd="$DESIGNATE_ROOTWRAP_BIN $DESIGNATE_ROOTWRAP_CONF *"
     tempfile=`mktemp`
     echo "$STACK_USER ALL=(root) NOPASSWD: $rootwrap_sudoer_cmd" >$tempfile
     chmod 0440 $tempfile
